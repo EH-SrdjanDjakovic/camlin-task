@@ -10,8 +10,10 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.16.12",
+    "chart.js": "^4.4.4",
     "quasar": "^2.16.11",
-    "vue": "^3.4.37"
+    "vue": "^3.4.37",
+    "vue-chartjs": "^5.3.1"
   },
   "devDependencies": {
     "@quasar/vite-plugin": "^1.7.0",
