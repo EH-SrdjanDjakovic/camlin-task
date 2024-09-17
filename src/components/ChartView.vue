@@ -16,22 +16,23 @@ import {
 import { Line } from "vue-chartjs";
 import { chartColors } from "../helpers/chartColors";
 import sampleData from "../data/sampledata.json";
+import { formatDate } from "../helpers/formatDate";
 
 ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend);
 
 let timestampsChartDefinition = sampleData[0].lastTenVoltgageReadings.map((reading) => reading.timestamp);
 
 timestampsChartDefinition = timestampsChartDefinition.map((timestamp) => {
-  const dateObj = new Date(timestamp);
-  const formattedDate = dateObj.toISOString().split("T")[0];
-  return formattedDate;
+  return formatDate(timestamp);
 });
 
 const chartDataset = sampleData.map((transformer) => {
+  const transformerColor = chartColors();
   return {
     label: transformer.name,
     data: transformer.lastTenVoltgageReadings.map((reading) => reading.voltage),
-    backgroundColor: chartColors(),
+    backgroundColor: transformerColor,
+    borderColor: transformerColor,
   };
 });
 
@@ -63,6 +64,21 @@ const options = {
           console.log(`Dataset ${datasetIndex + 1} selected`);
         }
       },
+    },
+  },
+  scales: {
+    x: {
+      title: {
+        display: true,
+        text: "Date", // X-axis label
+      },
+    },
+    y: {
+      title: {
+        display: true,
+        text: "Voltage", // Y-axis label
+      },
+      beginAtZero: true,
     },
   },
 };
