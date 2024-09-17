@@ -63,7 +63,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import data from "../data/sampledata.json";
-import { formatDate, formatVoltageValue } from "../helpers/formatDate";
+import { formatDate, formatVoltageValue } from "../helpers/formatters";
 
 const columns = [
   {

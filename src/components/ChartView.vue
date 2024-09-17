@@ -16,7 +16,7 @@ import {
 import { Line } from "vue-chartjs";
 import { chartColors } from "../helpers/chartColors";
 import sampleData from "../data/sampledata.json";
-import { formatDate } from "../helpers/formatDate";
+import { formatDate } from "../helpers/formatters";
 
 ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend);
 
