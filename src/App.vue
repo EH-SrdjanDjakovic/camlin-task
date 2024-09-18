@@ -41,10 +41,15 @@ import data from "./data/sampledata.json";
 const tab = ref("table");
 const splitterModel = ref(20);
 
+const trafoSelectionFromLocalStorage = localStorage.getItem("chartTrafoSelection");
+
 const appState = ref({
-  // initially all transformers are visible on chart
-  selectedTransformers: data.map((transformer) => transformer.name),
-  tableSearchInput: "",
+  // if trafo selection doesn't exist in a localStorage, all transformers will be selected
+  selectedTransformers:
+    trafoSelectionFromLocalStorage && trafoSelectionFromLocalStorage.length > 0
+      ? JSON.parse(trafoSelectionFromLocalStorage)
+      : data.map((transformer) => transformer.name),
+  tableSearchInput: localStorage.getItem("tableSearchInput") || "",
 });
 
 // moze da ide u zasebnu funkciju radi unut testova
@@ -57,9 +62,11 @@ const updatedSelectedTransformers = (trafo: { [key: string]: boolean }): void =>
       (element) => element !== selectedTrafoKey
     );
   }
+  localStorage.setItem("chartTrafoSelection", JSON.stringify(appState.value.selectedTransformers));
 };
 
 const tableSearchChanged = (newFilter: string) => {
   appState.value.tableSearchInput = newFilter;
+  localStorage.setItem("tableSearchInput", newFilter);
 };
 </script>
