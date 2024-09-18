@@ -1,13 +1,3 @@
-<script setup lang="ts">
-import TableView from "./components/TableView.vue";
-import ChartView from "./components/ChartView.vue";
-
-import { ref } from "vue";
-
-const tab = ref("table");
-const splitterModel = ref(20);
-</script>
-
 <template>
   <div>
     <q-toolbar class="bg-primary text-white">
@@ -25,13 +15,51 @@ const splitterModel = ref(20);
 
       <template v-slot:after>
         <q-tab-panels v-model="tab" animated swipeable vertical transition-prev="jump-up" transition-next="jump-up">
-          <q-tab-panel name="table"> <TableView /> </q-tab-panel>
+          <q-tab-panel name="table">
+            <TableView :searchState="appState.tableSearchInput" @update-table-search="tableSearchChanged" />
+          </q-tab-panel>
 
           <q-tab-panel name="chart">
-            <ChartView />
+            <ChartView
+              :selectedTransformers="appState.selectedTransformers"
+              @update-trafo-selection="updatedSelectedTransformers"
+            />
           </q-tab-panel>
         </q-tab-panels>
       </template>
     </q-splitter>
   </div>
 </template>
+
+<script setup lang="ts">
+import TableView from "./components/TableView.vue";
+import ChartView from "./components/ChartView.vue";
+
+import { ref } from "vue";
+import data from "./data/sampledata.json";
+
+const tab = ref("table");
+const splitterModel = ref(20);
+
+const appState = ref({
+  // initially all transformers are visible on chart
+  selectedTransformers: data.map((transformer) => transformer.name),
+  tableSearchInput: "",
+});
+
+// moze da ide u zasebnu funkciju radi unut testova
+const updatedSelectedTransformers = (trafo: { [key: string]: boolean }): void => {
+  const selectedTrafoKey: string = Object.keys(trafo)[0];
+  if (trafo[selectedTrafoKey]) {
+    appState.value.selectedTransformers.push(selectedTrafoKey);
+  } else {
+    appState.value.selectedTransformers = appState.value.selectedTransformers.filter(
+      (element) => element !== selectedTrafoKey
+    );
+  }
+};
+
+const tableSearchChanged = (newFilter: string) => {
+  appState.value.tableSearchInput = newFilter;
+};
+</script>

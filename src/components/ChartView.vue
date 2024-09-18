@@ -12,27 +12,39 @@ import {
   PointElement,
   CategoryScale,
   LinearScale,
+  LegendItem,
+  ChartEvent,
 } from "chart.js";
 import { Line } from "vue-chartjs";
 import { chartColors } from "../helpers/chartColors";
 import sampleData from "../data/sampledata.json";
 import { formatDate } from "../helpers/formatters";
+import { IChartLineData } from "../models/IChartLineData";
+import { ITransformer } from "../models/ITransformer";
+
+const props = defineProps(["selectedTransformers"]);
+const emit = defineEmits(["update-trafo-selection"]);
 
 ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend);
 
-let timestampsChartDefinition = sampleData[0].lastTenVoltgageReadings.map((reading) => reading.timestamp);
+// timestamp extraction and date formatting
+let timestampsChartDefinition: Array<string> = sampleData[0].lastTenVoltgageReadings.map(
+  (reading) => reading.timestamp
+);
 
 timestampsChartDefinition = timestampsChartDefinition.map((timestamp) => {
   return formatDate(timestamp);
 });
 
-const chartDataset = sampleData.map((transformer) => {
+// setting necessary data for chart
+const chartDataset: Array<IChartLineData> = sampleData.map((transformer: ITransformer) => {
   const transformerColor = chartColors();
   return {
     label: transformer.name,
     data: transformer.lastTenVoltgageReadings.map((reading) => reading.voltage),
     backgroundColor: transformerColor,
     borderColor: transformerColor,
+    hidden: !props.selectedTransformers.includes(transformer.name),
   };
 });
 
@@ -45,24 +57,20 @@ const options = {
   responsive: true,
   plugins: {
     legend: {
-      onClick: (e, legendItem, legend) => {
+      onClick: (_e: ChartEvent, legendItem: LegendItem, legend: { chart: ChartJS }) => {
         // Get the chart and dataset index
         const chart = legend.chart;
         const datasetIndex = legendItem.datasetIndex;
 
         // Toggle dataset visibility
-        const isVisible = chart.isDatasetVisible(datasetIndex);
-        chart.setDatasetVisibility(datasetIndex, !isVisible);
+        const isVisible = chart.isDatasetVisible(datasetIndex as number);
+        chart.setDatasetVisibility(datasetIndex as number, !isVisible);
 
         // Force chart update to reflect the change
         chart.update();
 
-        // Log the dataset state (selected/deselected)
-        if (isVisible) {
-          console.log(`Dataset ${datasetIndex + 1} deselected`);
-        } else {
-          console.log(`Dataset ${datasetIndex + 1} selected`);
-        }
+        // update app state
+        emit("update-trafo-selection", { [legendItem.text]: !isVisible });
       },
     },
   },

@@ -61,9 +61,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import data from "../data/sampledata.json";
 import { formatDate, formatVoltageValue } from "../helpers/formatters";
+
+const props = defineProps(["searchState"]);
+const emit = defineEmits(["update-table-search"]);
 
 const columns = [
   {
@@ -72,7 +75,6 @@ const columns = [
     label: "Name",
     align: "left",
     field: "name",
-    format: (val) => `${val}`,
     sortable: true,
   },
   { name: "region", align: "center", label: "Region", field: "region", sortable: true },
@@ -81,7 +83,11 @@ const columns = [
 
 const rows = data;
 
-const filter = ref("");
+const filter = ref(props.searchState);
+
+watch(filter, (newFilter) => {
+  emit("update-table-search", newFilter);
+});
 </script>
 
 <style scoped>
