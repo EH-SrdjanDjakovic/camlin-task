@@ -21,9 +21,9 @@ import sampleData from "../data/sampledata.json";
 import { formatDate } from "../helpers/formatters";
 import { IChartLineData } from "../models/IChartLineData";
 import { ITransformer } from "../models/ITransformer";
+import { useTrafoStore } from "../store/appStore";
 
-const props = defineProps(["selectedTransformers"]);
-const emit = defineEmits(["update-trafo-selection"]);
+const trafoStore = useTrafoStore();
 
 ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend);
 
@@ -44,7 +44,7 @@ const chartDataset: Array<IChartLineData> = sampleData.map((transformer: ITransf
     data: transformer.lastTenVoltgageReadings.map((reading) => reading.voltage),
     backgroundColor: transformerColor,
     borderColor: transformerColor,
-    hidden: !props.selectedTransformers.includes(transformer.name),
+    hidden: !trafoStore.selectedTransformers.includes(transformer.name),
   };
 });
 
@@ -70,7 +70,7 @@ const options = {
         chart.update();
 
         // update app state
-        emit("update-trafo-selection", { [legendItem.text]: !isVisible });
+        trafoStore.updatedSelectedTransformers({ [legendItem.text]: !isVisible });
       },
     },
   },

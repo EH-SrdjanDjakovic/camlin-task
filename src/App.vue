@@ -16,14 +16,11 @@
       <template v-slot:after>
         <q-tab-panels v-model="tab" animated swipeable vertical transition-prev="jump-up" transition-next="jump-up">
           <q-tab-panel name="table">
-            <TableView :searchState="appState.tableSearchInput" @update-table-search="tableSearchChanged" />
+            <TableView />
           </q-tab-panel>
 
           <q-tab-panel name="chart">
-            <ChartView
-              :selectedTransformers="appState.selectedTransformers"
-              @update-trafo-selection="updatedSelectedTransformers"
-            />
+            <ChartView />
           </q-tab-panel>
         </q-tab-panels>
       </template>
@@ -36,37 +33,7 @@ import TableView from "./components/TableView.vue";
 import ChartView from "./components/ChartView.vue";
 
 import { ref } from "vue";
-import data from "./data/sampledata.json";
 
 const tab = ref("table");
 const splitterModel = ref(20);
-
-const trafoSelectionFromLocalStorage = localStorage.getItem("chartTrafoSelection");
-
-const appState = ref({
-  // if trafo selection doesn't exist in a localStorage, all transformers will be selected
-  selectedTransformers:
-    trafoSelectionFromLocalStorage && trafoSelectionFromLocalStorage.length > 0
-      ? JSON.parse(trafoSelectionFromLocalStorage)
-      : data.map((transformer) => transformer.name),
-  tableSearchInput: localStorage.getItem("tableSearchInput") || "",
-});
-
-// moze da ide u zasebnu funkciju radi unut testova
-const updatedSelectedTransformers = (trafo: { [key: string]: boolean }): void => {
-  const selectedTrafoKey: string = Object.keys(trafo)[0];
-  if (trafo[selectedTrafoKey]) {
-    appState.value.selectedTransformers.push(selectedTrafoKey);
-  } else {
-    appState.value.selectedTransformers = appState.value.selectedTransformers.filter(
-      (element) => element !== selectedTrafoKey
-    );
-  }
-  localStorage.setItem("chartTrafoSelection", JSON.stringify(appState.value.selectedTransformers));
-};
-
-const tableSearchChanged = (newFilter: string) => {
-  appState.value.tableSearchInput = newFilter;
-  localStorage.setItem("tableSearchInput", newFilter);
-};
 </script>

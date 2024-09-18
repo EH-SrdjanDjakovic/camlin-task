@@ -64,9 +64,9 @@
 import { ref, watch } from "vue";
 import data from "../data/sampledata.json";
 import { formatDate, formatVoltageValue } from "../helpers/formatters";
+import { useTrafoStore } from "../store/appStore";
 
-const props = defineProps(["searchState"]);
-const emit = defineEmits(["update-table-search"]);
+const trafoStore = useTrafoStore();
 
 const columns = [
   {
@@ -83,10 +83,10 @@ const columns = [
 
 const rows = data;
 
-const filter = ref(props.searchState);
+const filter = ref(trafoStore.tableSearchInput);
 
 watch(filter, (newFilter) => {
-  emit("update-table-search", newFilter);
+  trafoStore.tableSearchChanged(newFilter);
 });
 </script>
 
