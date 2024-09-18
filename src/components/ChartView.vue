@@ -17,7 +17,6 @@ import {
 } from "chart.js";
 import { Line } from "vue-chartjs";
 import { chartColors } from "../helpers/chartColors";
-import sampleData from "../data/sampledata.json";
 import { formatDate } from "../helpers/formatters";
 import { IChartLineData } from "../models/IChartLineData";
 import { ITransformer } from "../models/ITransformer";
@@ -28,7 +27,7 @@ const trafoStore = useTrafoStore();
 ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend);
 
 // timestamp extraction and date formatting
-let timestampsChartDefinition: Array<string> = sampleData[0].lastTenVoltgageReadings.map(
+let timestampsChartDefinition: Array<string> = trafoStore.transformersData[0].lastTenVoltgageReadings.map(
   (reading) => reading.timestamp
 );
 
@@ -37,7 +36,7 @@ timestampsChartDefinition = timestampsChartDefinition.map((timestamp) => {
 });
 
 // setting necessary data for chart
-const chartDataset: Array<IChartLineData> = sampleData.map((transformer: ITransformer) => {
+const chartDataset: Array<IChartLineData> = trafoStore.transformersData.map((transformer: ITransformer) => {
   const transformerColor = chartColors();
   return {
     label: transformer.name,

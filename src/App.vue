@@ -31,9 +31,12 @@
 <script setup lang="ts">
 import TableView from "./components/TableView.vue";
 import ChartView from "./components/ChartView.vue";
-
+import { useTrafoStore } from "./store/appStore";
 import { ref } from "vue";
 
 const tab = ref("table");
 const splitterModel = ref(20);
+
+const trafoStore = useTrafoStore();
+trafoStore.getAllTransformersData();
 </script>

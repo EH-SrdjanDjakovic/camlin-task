@@ -1,6 +1,15 @@
 <template>
   <div class="q-pa-md">
-    <q-table flat bordered title="Transformers" :rows="rows" :columns="columns" row-key="name" :filter="filter">
+    <!-- rows need to be assinged to pinia store because initial view is tabular, so once data is retrieved it needs to be updated accordinlgy -->
+    <q-table
+      flat
+      bordered
+      title="Transformers"
+      :rows="trafoStore.transformersData"
+      :columns="columns"
+      row-key="name"
+      :filter="filter"
+    >
       <template v-slot:top-right>
         <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
           <template v-slot:append>
@@ -62,7 +71,6 @@
 
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import data from "../data/sampledata.json";
 import { formatDate, formatVoltageValue } from "../helpers/formatters";
 import { useTrafoStore } from "../store/appStore";
 
@@ -71,17 +79,14 @@ const trafoStore = useTrafoStore();
 const columns = [
   {
     name: "name",
-    required: true,
     label: "Name",
     align: "left",
     field: "name",
     sortable: true,
   },
-  { name: "region", align: "center", label: "Region", field: "region", sortable: true },
-  { name: "healt", label: "Healt", field: "health", sortable: true },
+  { name: "region", align: "left", label: "Region", field: "region", sortable: true },
+  { name: "healt", label: "Healt", align: "left", field: "health", sortable: true },
 ];
-
-const rows = data;
 
 const filter = ref(trafoStore.tableSearchInput);
 
