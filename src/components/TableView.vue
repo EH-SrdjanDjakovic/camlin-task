@@ -77,15 +77,9 @@ import { useTrafoStore } from "../store/appStore";
 const trafoStore = useTrafoStore();
 
 const columns = [
-  {
-    name: "name",
-    label: "Name",
-    align: "left",
-    field: "name",
-    sortable: true,
-  },
-  { name: "region", align: "left", label: "Region", field: "region", sortable: true },
-  { name: "healt", label: "Healt", align: "left", field: "health", sortable: true },
+  { name: "name", label: "Name", field: "name", align: "left" as "left", sortable: true }, // as "left" because of special type, typescript outputs error
+  { name: "region", label: "Region", field: "region", align: "left" as "left", sortable: true },
+  { name: "healt", label: "Healt", field: "health", align: "left" as "left", sortable: true },
 ];
 
 const filter = ref(trafoStore.tableSearchInput);

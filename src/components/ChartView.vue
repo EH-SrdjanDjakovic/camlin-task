@@ -40,7 +40,7 @@ const chartDataset: Array<IChartLineData> = trafoStore.transformersData.map((tra
   const transformerColor = chartColors();
   return {
     label: transformer.name,
-    data: transformer.lastTenVoltgageReadings.map((reading) => reading.voltage),
+    data: transformer.lastTenVoltgageReadings.map((reading) => Number(reading.voltage)),
     backgroundColor: transformerColor,
     borderColor: transformerColor,
     hidden: !trafoStore.selectedTransformers.includes(transformer.name),
