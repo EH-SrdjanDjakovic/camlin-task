@@ -2,8 +2,6 @@
   <div>
     <q-toolbar class="bg-primary text-white">
       <q-toolbar-title>Frontend Tech Lead / Software Architect Take-Home Technical Test</q-toolbar-title>
-
-      <img src="https://s3.eu-west-1.amazonaws.com/camlin-group/logos/camlin-group-logo.svg" />
     </q-toolbar>
     <q-splitter v-model="splitterModel">
       <template v-slot:before>
