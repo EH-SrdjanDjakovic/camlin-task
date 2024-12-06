@@ -35,6 +35,6 @@ This application is hosted as docker image on Docker Hub. It can be pulled runni
 
 After downloading image successfully run the container by executing following command:
 
-`docker run -p 5001:80 -p 3000:3000 camlin-test-app`
+`docker run -p 5001:80 -p 3000:3000 eh0srdjandj/test-app`
 
 After running docker container open browser with `http://localhost:5001`
